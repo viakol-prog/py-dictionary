@@ -110,3 +110,23 @@ class Dictionary:
             while current:
                 yield current.key
                 current = current.next
+
+    def __delitem__(self, key: Any) -> None:
+        key_hash, index = self._get_index(key)
+        current = self.table[index]
+        prev = None
+
+        while current:
+            if current.key == key:
+                if prev is None:
+                    self.table[index] = current.next
+                else:
+                    prev.next = current.next
+
+                self.size -= 1
+                return
+
+            prev = current
+            current = current.next
+
+        raise KeyError(key)
